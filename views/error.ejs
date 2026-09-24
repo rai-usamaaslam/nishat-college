@@ -1,3 +1,24 @@
-<h1><%= message %></h1>
-<h2><%= error.status %></h2>
-<pre><%= error.stack %></pre>
+<!doctype html>
+<html lang="en-PK">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
+    <title><%= status %> | Nishat Institute of Medical Science and Technology</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/public-theme.css">
+  </head>
+  <body>
+    <%- include("_site-header", {active: ""}) %>
+    <main class="success-page error-page">
+      <span class="eyebrow">ERROR <%= status %></span>
+      <h1><%= message %></h1>
+      <% if (error && error.stack) { %><pre><%= error.stack %></pre><% } %>
+      <div class="error-actions">
+        <a class="button-primary" href="/">Return home</a>
+        <a class="text-link" href="/courses">Browse programs</a>
+      </div>
+    </main>
+    <%- include("_site-footer") %>
+  </body>
+</html>

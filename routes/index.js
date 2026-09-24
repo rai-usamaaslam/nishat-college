@@ -7,8 +7,40 @@ const Application = require("../models/Application");
 const User = require("../models/User");
 const nodemailer = require("nodemailer");
 
+function escapeXml(value) {
+  return String(value).replace(/[<>&"']/g, (character) => ({
+    "<": "&lt;", ">": "&gt;", "&": "&amp;", '"': "&quot;", "'": "&apos;",
+  })[character]);
+}
+
+router.get("/robots.txt", (req, res) => {
+  res.type("text/plain").send([
+    "User-agent: *",
+    "Allow: /",
+    "Disallow: /admin/",
+    "Disallow: /apply/",
+    `Sitemap: ${res.locals.siteOrigin}/sitemap.xml`,
+    "",
+  ].join("\n"));
+});
+
+router.get("/sitemap.xml", async (req, res, next) => {
+  try {
+    const courses = await Course.find({ status: "active" }).select("_id updatedAt").lean();
+    const routes = ["/", "/about", "/courses", "/announcements", "/contact"]
+      .map((path) => ({ path, lastmod: null }))
+      .concat(courses.map((course) => ({ path: `/courses/${course._id}`, lastmod: course.updatedAt })));
+    const entries = routes.map(({ path, lastmod }) => {
+      const modified = lastmod ? `<lastmod>${new Date(lastmod).toISOString()}</lastmod>` : "";
+      return `<url><loc>${escapeXml(`${res.locals.siteOrigin}${path}`)}</loc>${modified}</url>`;
+    }).join("");
+    res.set("Cache-Control", "public, max-age=3600");
+    return res.type("application/xml").send(`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${entries}</urlset>`);
+  } catch (error) { return next(error); }
+});
+
 function renderContact(res, { error = null, message = null, values = {} } = {}, status = 200) {
-  return res.status(status).render("contact", { title: "Contact | Nishat Institute of Medical Science and Technology", error, message, values });
+  return res.status(status).render("contact", { title: "Contact Nishat Institute | Chiniot, Pakistan", error, message, values });
 }
 
 router.get("/", async (req, res, next) => {
@@ -17,23 +49,23 @@ router.get("/", async (req, res, next) => {
       Course.find({ status: "active" }).sort({ createdAt: -1 }).lean(),
       Announcement.find({ status: "published" }).sort({ createdAt: -1 }).limit(5).lean(),
     ]);
-    return res.render("index", { title: "Nishat Institute of Medical Science and Technology", courses, announcements });
+    return res.render("index", { title: "Nishat Institute of Medical Science and Technology | Chiniot", courses, announcements });
   } catch (error) { return next(error); }
 });
 
-router.get("/about", (req, res) => res.render("about", { title: "About | Nishat Institute of Medical Science and Technology" }));
+router.get("/about", (req, res) => res.render("about", { title: "About Nishat Institute | Chiniot, Pakistan" }));
 
 router.get("/courses", async (req, res, next) => {
   try {
     const courses = await Course.find({ status: "active" }).sort({ createdAt: -1 }).lean();
-    return res.render("programs", { title: "Our Programs | Nishat Institute of Medical Science and Technology", courses });
+    return res.render("programs", { title: "Medical & Allied Health Programs | Chiniot", courses });
   } catch (error) { return next(error); }
 });
 
 router.get("/announcements", async (req, res, next) => {
   try {
     const announcements = await Announcement.find({ status: "published" }).sort({ createdAt: -1 }).lean();
-    return res.render("announcements", { title: "Announcements | Nishat Institute of Medical Science and Technology", announcements });
+    return res.render("announcements", { title: "Announcements | Nishat Institute, Chiniot", announcements });
   } catch (error) { return next(error); }
 });
 
@@ -85,7 +117,7 @@ router.get("/courses/:id", async (req, res, next) => {
   try {
     const course = await Course.findOne({ _id: req.params.id, status: "active" }).lean();
     if (!course) return next();
-    return res.render("course-detail", { title: `${course.title} | Nishat Institute of Medical Science and Technology`, course });
+    return res.render("course-detail", { title: `${course.title} | Nishat Institute, Chiniot`, course });
   } catch (error) { return next(error); }
 });
 
@@ -94,7 +126,7 @@ router.get("/apply/:courseId", async (req, res, next) => {
   try {
     const course = await Course.findOne({ _id: req.params.courseId, status: "active" }).lean();
     if (!course) return next();
-    return res.render("application-form", { title: `Apply for ${course.title}`, course, error: null, values: {} });
+    return res.render("application-form", { title: `Apply for ${course.title} | Nishat Institute, Chiniot`, course, error: null, values: {} });
   } catch (error) { return next(error); }
 });
 
@@ -120,7 +152,7 @@ router.post("/apply/:courseId", async (req, res, next) => {
       values.dob, values.gender, values.address, values.qualification].some((item) => !item);
     if (missing || !/^\S+@\S+\.\S+$/.test(values.email) || !Number.isFinite(values.marks) || values.marks < 0) {
       return res.status(400).render("application-form", {
-        title: `Apply for ${course.title}`, course, values,
+        title: `Apply for ${course.title} | Nishat Institute, Chiniot`, course, values,
         error: "Complete every field using a valid email address and marks value.",
       });
     }
