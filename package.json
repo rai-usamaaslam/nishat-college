@@ -1,0 +1,23 @@
+{
+  "name": "nishat-college",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "create-admin": "node ./scripts/createAdmin.js"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "connect-mongo": "^6.0.0",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "dotenv": "^18.0.3",
+    "ejs": "~2.6.1",
+    "express": "~4.16.1",
+    "express-session": "^1.19.0",
+    "http-errors": "~1.6.3",
+    "mongoose": "^9.10.2",
+    "morgan": "~1.9.1",
+    "nodemailer": "^10.0.10"
+  }
+}

@@ -1,0 +1,7 @@
+<%- include("_page-start", {title, admin, active: "announcements"}) %>
+<div class="page-title-row"><div><span class="eyebrow">COLLEGE UPDATES</span><h1>Announcements</h1><p>Publish important updates on the public homepage.</p></div><a class="primary-link" href="/admin/announcements/create">＋ Add announcement</a></div>
+<div class="table-card"><div class="table-scroll"><table><thead><tr><th>Announcement</th><th>Status</th><th>Created</th><th>Actions</th></tr></thead><tbody>
+<% if (!announcements.length) { %><tr><td colspan="4" class="empty-state">No announcements have been created yet.</td></tr><% } %>
+<% announcements.forEach(item => { %><tr><td><strong><%= item.title %></strong><small><%= item.description %></small></td><td><span class="status-pill <%= item.status %>"><%= item.status %></span></td><td><%= new Date(item.createdAt).toLocaleDateString("en-GB") %></td><td class="action-cell"><a class="secondary-link" href="/admin/announcements/edit/<%= item._id %>">Edit</a><form method="post" action="/admin/announcements/<%= item._id %>/delete" onsubmit="return confirm('Delete this announcement?')"><button class="danger-link">Delete</button></form></td></tr><% }) %>
+</tbody></table></div></div>
+<%- include("_page-end") %>

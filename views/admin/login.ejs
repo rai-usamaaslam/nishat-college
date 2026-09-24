@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a1d3a">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/stylesheets/admin-login.css">
+</head>
+<body>
+  <main class="login-shell">
+    <section class="brand-panel" aria-label="Nishat Institute of Medical Science and Technology">
+      <a class="brand" href="/" aria-label="Nishat Institute of Medical Science and Technology homepage">
+        <img class="auth-logo" src="/images/logo/IMG-20260923-WA0018(1).jpg" alt="">
+        <span><strong>Nishat Institute</strong><small>Medical Science and Technology</small></span>
+      </a>
+      <div class="brand-message">
+        <span class="eyebrow">ADMINISTRATION PORTAL</span>
+        <h1>Supporting the next generation of healthcare.</h1>
+        <p>Secure access for Nishat Institute administrators.</p>
+      </div>
+      <span class="panel-caption">NISHAT INSTITUTE OF MEDICAL SCIENCE AND TECHNOLOGY</span>
+    </section>
+
+    <section class="form-panel">
+      <div class="form-wrap">
+        <span class="mobile-brand">NISHAT INSTITUTE OF MEDICAL SCIENCE AND TECHNOLOGY</span>
+        <span class="eyebrow">ADMIN SIGN IN</span>
+        <h2>Welcome back</h2>
+        <p class="intro">Sign in with your administrator account to continue.</p>
+
+        <% if (error) { %>
+          <div class="error" role="alert"><%= error %></div>
+        <% } %>
+        <% if (resetSuccess) { %><div class="success" role="status">Your password has been updated. Sign in with the new password.</div><% } %>
+
+        <form action="/admin/login" method="post">
+          <label for="email">Email address</label>
+          <input id="email" name="email" type="email" autocomplete="username" required autofocus>
+
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" required>
+
+          <button type="submit">Sign in <span aria-hidden="true">→</span></button>
+        </form>
+        <a class="forgot-link" href="/admin/forgot-password">Forgot password?</a>
+        <a class="back-link" href="/">← Back to Website</a>
+      </div>
+      <footer>© <%= new Date().getFullYear() %> Nishat Institute of Medical Science and Technology</footer>
+    </section>
+  </main>
+</body>
+</html>

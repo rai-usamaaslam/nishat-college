@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title><%= title %></title><link rel="stylesheet" href="/stylesheets/admin.css"><link rel="stylesheet" href="/stylesheets/admin-pages.css">
+</head>
+<body>
+  <header class="pagebar">
+    <a class="pagebrand" href="/admin/dashboard"><img src="/images/logo/IMG-20260923-WA0018(1).jpg" alt="" class="admin-logo"><strong>Nishat Institute of Medical Science and Technology</strong></a>
+    <nav aria-label="Admin navigation">
+      <a class="<%= active === 'dashboard' ? 'current' : '' %>" href="/admin/dashboard">Dashboard</a>
+      <a class="<%= active === 'courses' ? 'current' : '' %>" href="/admin/courses">Courses</a>
+      <a class="<%= active === 'applications' ? 'current' : '' %>" href="/admin/applications">Applications</a>
+      <a class="<%= active === 'announcements' ? 'current' : '' %>" href="/admin/announcements">Announcements</a>
+      <a class="<%= active === 'settings' ? 'current' : '' %>" href="/admin/settings">Settings</a>
+      <a href="/" target="_blank" rel="noopener noreferrer">View Website</a>
+      <a href="/admin/logout">Logout</a>
+    </nav>
+    <div class="admin-greeting">Signed in as <strong><%= admin.name %></strong></div>
+  </header>
+  <main class="manage-main">
+    <a class="back-dashboard" href="/admin/dashboard">← Dashboard</a>

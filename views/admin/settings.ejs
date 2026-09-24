@@ -1,0 +1,7 @@
+<%- include("_page-start", {title, admin, active: "settings"}) %>
+<div class="page-title-row"><div><span class="eyebrow">ACCOUNT</span><h1>Admin settings</h1><p>Update your administrator name, email address, or password.</p></div></div>
+<% if (error) { %><div class="form-error"><%= error %></div><% } %>
+<% if (message) { %><div class="notice"><%= message %></div><% } %>
+<% if (queryNotice) { %><div class="notice"><%= queryNotice %></div><% } %>
+<form class="form-card single-column" method="post" action="/admin/settings"><h2>Profile</h2><label>Name<input name="name" required maxlength="120" value="<%= admin.name %>"></label><label>Email<input name="email" type="email" required value="<%= admin.email %>"></label><hr><h2>Change password</h2><p class="form-hint">Leave both new password fields empty to keep your current password. Passwords must contain at least 12 characters.</p><label>Current password<input name="currentPassword" type="password" autocomplete="current-password" required></label><label>New password<input name="newPassword" type="password" autocomplete="new-password" minlength="12"></label><label>Confirm new password<input name="confirmPassword" type="password" autocomplete="new-password" minlength="12"></label><div class="form-actions"><button class="primary-button">Save settings</button></div></form>
+<%- include("_page-end") %>

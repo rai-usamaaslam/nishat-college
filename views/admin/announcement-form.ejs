@@ -1,0 +1,5 @@
+<%- include("_page-start", {title, admin, active: "announcements"}) %>
+<div class="page-title-row"><div><span class="eyebrow">COLLEGE UPDATES</span><h1><%= announcement._id ? "Edit announcement" : "Create announcement" %></h1></div></div>
+<% if (error) { %><div class="form-error"><%= error %></div><% } %>
+<form class="form-card single-column" method="post" action="<%= formAction %>"><label>Title<input name="title" maxlength="160" required value="<%= announcement.title || '' %>"></label><label>Description<textarea name="description" rows="7" required><%= announcement.description || '' %></textarea></label><label>Status<select name="status"><option value="published" <%= announcement.status !== "unpublished" ? "selected" : "" %>>Published</option><option value="unpublished" <%= announcement.status === "unpublished" ? "selected" : "" %>>Unpublished</option></select></label><div class="form-actions"><a class="secondary-link" href="/admin/announcements">Cancel</a><button class="primary-button"><%= announcement._id ? "Save announcement" : "Publish announcement" %></button></div></form>
+<%- include("_page-end") %>

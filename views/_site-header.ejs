@@ -1,0 +1,21 @@
+<header class="navbar site-header">
+  <div class="container">
+    <a href="/" class="navbar-brand" aria-label="Nishat Institute of Medical Science and Technology home">
+      <img class="navbar-image" src="/images/logo/IMG-20260923-WA0018(1).jpg" alt="">
+      <span class="navbar-brand-text"><strong>Nishat Institute of Medical Science and Technology</strong><span>Healthcare Education &amp; Training</span></span>
+    </a>
+    <nav class="navbar-links" id="primary-navigation" aria-label="Primary navigation">
+      <a href="/" class="<%= active === 'home' ? 'active' : '' %>" <%= active === 'home' ? 'aria-current="page"' : '' %>>Home</a>
+      <a href="/about" class="<%= active === 'about' ? 'active' : '' %>" <%= active === 'about' ? 'aria-current="page"' : '' %>>About</a>
+      <a href="/courses" class="<%= active === 'programs' ? 'active' : '' %>" <%= active === 'programs' ? 'aria-current="page"' : '' %>>Courses</a>
+      <a href="/courses" class="<%= active === 'apply' ? 'active' : '' %>" <%= active === 'apply' ? 'aria-current="page"' : '' %>>Apply</a>
+      <a href="/contact" class="<%= active === 'contact' ? 'active' : '' %>" <%= active === 'contact' ? 'aria-current="page"' : '' %>>Contact</a>
+    </nav>
+    <div class="navbar-actions">
+      <a href="/courses" class="btn btn-primary desktop-only">Apply Now</a>
+      <button class="navbar-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="primary-navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,15 @@
+<%- include("_page-start", {title, admin, active: "courses"}) %>
+<div class="page-title-row"><div><span class="eyebrow">ACADEMIC PROGRAMS</span><h1><%= course._id ? "Edit course" : "Create course" %></h1><p>Course information appears on the public website when its status is active.</p></div></div>
+<% if (error) { %><div class="form-error"><%= error %></div><% } %>
+<form class="form-card" method="post" action="<%= formAction %>">
+  <label>Course title<input name="title" maxlength="120" required value="<%= course.title || '' %>"></label>
+  <label>Short description<input name="shortDescription" maxlength="240" required value="<%= course.shortDescription || '' %>"></label>
+  <label class="wide">Full description<textarea name="description" rows="7" required><%= course.description || '' %></textarea></label>
+  <label>Duration<input name="duration" required placeholder="e.g. 5 years" value="<%= course.duration || '' %>"></label>
+  <label>Eligibility<input name="eligibility" required value="<%= course.eligibility || '' %>"></label>
+  <label>Fee (PKR)<input name="fee" type="number" min="0" step="0.01" required value="<%= course.fee ?? '' %>"></label>
+  <label>Image URL<input name="image" type="url" placeholder="https://..." value="<%= course.image || '' %>"></label>
+  <label>Status<select name="status"><option value="active" <%= course.status !== "inactive" ? "selected" : "" %>>Active (public)</option><option value="inactive" <%= course.status === "inactive" ? "selected" : "" %>>Inactive (hidden)</option></select></label>
+  <div class="form-actions wide"><a class="secondary-link" href="/admin/courses">Cancel</a><button class="primary-button" type="submit"><%= course._id ? "Save course" : "Create course" %></button></div>
+</form>
+<%- include("_page-end") %>

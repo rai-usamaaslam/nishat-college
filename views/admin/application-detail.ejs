@@ -1,0 +1,12 @@
+<%- include("_page-start", {title, admin, active: "applications"}) %>
+<div class="page-title-row"><div><span class="eyebrow">ADMISSIONS · APPLICATION</span><h1><%= application.studentName %></h1><p>Submitted <%= new Date(application.createdAt).toLocaleString("en-GB") %></p></div></div>
+<% if (updated) { %><div class="notice">Application status updated.</div><% } %>
+<% if (error) { %><div class="form-error"><%= error %></div><% } %>
+<section class="detail-card"><h2>Applicant details</h2><dl class="detail-grid">
+<dt>Father / guardian</dt><dd><%= application.fatherName %></dd><dt>Email</dt><dd><a href="mailto:<%= application.email %>"><%= application.email %></a></dd>
+<dt>Phone</dt><dd><%= application.phone %></dd><dt>CNIC</dt><dd><%= application.cnic %></dd><dt>Date of birth</dt><dd><%= new Date(application.dob).toLocaleDateString("en-GB") %></dd>
+<dt>Gender</dt><dd><%= application.gender %></dd><dt>Address</dt><dd><%= application.address %></dd><dt>Qualification</dt><dd><%= application.qualification %></dd>
+<dt>Marks</dt><dd><%= application.marks %></dd><dt>Course</dt><dd><%= application.course ? application.course.title : "Course unavailable" %></dd><dt>Current status</dt><dd><span class="status-pill <%= application.status.toLowerCase() %>"><%= application.status %></span></dd>
+</dl></section>
+<form class="form-card compact-form" method="post" action="/admin/applications/<%= application._id %>/status"><label>Update application status<select name="status"><% ["Pending","Accepted","Rejected"].forEach(item => { %><option value="<%= item %>" <%= application.status === item ? "selected" : "" %>><%= item %></option><% }) %></select></label><div class="form-actions"><a class="secondary-link" href="/admin/applications">Back to applications</a><button class="primary-button">Save status</button></div></form>
+<%- include("_page-end") %>

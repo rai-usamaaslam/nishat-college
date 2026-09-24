@@ -1,0 +1,8 @@
+<%- include("_page-start", {title, admin, active: "courses"}) %>
+<div class="page-title-row"><div><span class="eyebrow">ACADEMIC PROGRAMS</span><h1>Courses</h1><p>Manage course information shown on the college website.</p></div><a class="primary-link" href="/admin/courses/create">＋ Add course</a></div>
+<% if (queryNotice) { %><div class="notice"><%= queryNotice %></div><% } %>
+<div class="table-card"><div class="table-scroll"><table><thead><tr><th>Course</th><th>Duration</th><th>Fee</th><th>Status</th><th>Public page</th><th>Actions</th></tr></thead><tbody>
+<% if (!courses.length) { %><tr><td colspan="6" class="empty-state">No courses have been added yet.</td></tr><% } %>
+<% courses.forEach(course => { %><tr><td><strong><%= course.title %></strong><small><%= course.shortDescription %></small></td><td><%= course.duration %></td><td><%= Number(course.fee).toLocaleString() %></td><td><span class="status-pill <%= course.status %>"><%= course.status %></span></td><td><% if (course.status === "active") { %><a href="/courses/<%= course._id %>" target="_blank" rel="noopener noreferrer">View ↗</a><% } else { %>Hidden<% } %></td><td class="action-cell"><a class="secondary-link" href="/admin/courses/edit/<%= course._id %>">Edit</a><form method="post" action="/admin/courses/<%= course._id %>/delete" onsubmit="return confirm('Delete this course? Courses with applications cannot be deleted.')"><button class="danger-link" type="submit">Delete</button></form></td></tr><% }) %>
+</tbody></table></div></div>
+<%- include("_page-end") %>

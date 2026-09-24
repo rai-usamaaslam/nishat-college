@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="College administration dashboard"
+    >
+
+    <title><%= title %></title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/stylesheets/admin.css"
+    >
+</head>
+
+<body>
+
+    <div class="admin-layout">
+
+        <!-- SIDEBAR -->
+
+        <aside class="sidebar" id="sidebar">
+
+            <div class="sidebar-brand">
+
+                <div class="brand-mark">
+                    N
+                </div>
+
+                <div class="brand-text">
+                        <strong>Nishat Institute</strong>
+                    <span>Medical Science and Technology</span>
+                </div>
+
+            </div>
+
+
+            <nav class="sidebar-nav">
+
+                <p class="nav-label">
+                    MAIN MENU
+                </p>
+
+                <a
+                    href="/admin/dashboard"
+                    class="nav-item active"
+                >
+                    <span class="nav-icon">⌂</span>
+                    <span>Dashboard</span>
+                </a>
+
+
+                <a
+                    href="/admin/courses"
+                    class="nav-item"
+                >
+                    <span class="nav-icon">▦</span>
+                    <span>Courses</span>
+                </a>
+
+
+                <a
+                    href="/admin/applications"
+                    class="nav-item"
+                >
+                    <span class="nav-icon">▤</span>
+                    <span>Applications</span>
+                </a>
+
+
+                <a
+                    href="/admin/announcements"
+                    class="nav-item"
+                >
+                    <span class="nav-icon">◈</span>
+                    <span>Announcements</span>
+                </a>
+
+
+                <p class="nav-label nav-label-spaced">
+                    SYSTEM
+                </p>
+
+
+                <a
+                    href="/admin/settings"
+                    class="nav-item"
+                >
+                    <span class="nav-icon">⚙</span>
+                    <span>Settings</span>
+                </a>
+
+
+                <a
+                    href="/"
+                    class="nav-item"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    <span class="nav-icon">↗</span>
+                    <span>View Website</span>
+                </a>
+
+                <a href="/admin/logout" class="nav-item">
+                    <span class="nav-icon">↪</span>
+                    <span>Logout</span>
+                </a>
+
+            </nav>
+
+
+            <div class="sidebar-bottom">
+
+                <div class="admin-profile">
+
+                    <div class="profile-avatar">
+                        <%= admin.name.charAt(0).toUpperCase() %>
+                    </div>
+
+                    <div class="profile-info">
+                        <strong><%= admin.name %></strong>
+                        <span><%= admin.email %></span>
+                    </div>
+
+                    <a href="/admin/logout" class="profile-menu" aria-label="Log out">↪</a>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+
+        <!-- MAIN -->
+
+        <main class="main-content">
+
+            <!-- TOPBAR -->
+
+            <header class="topbar">
+
+                <button
+                    class="mobile-menu"
+                    id="mobileMenu"
+                    aria-label="Open menu"
+                >
+                    ☰
+                </button>
+
+
+                <div class="page-heading">
+
+                    <span class="eyebrow">
+                        ADMINISTRATION
+                    </span>
+
+                    <h1>
+                        Dashboard
+                    </h1>
+
+                </div>
+
+
+                <div class="topbar-actions">
+
+                    <a href="/" target="_blank" rel="noopener noreferrer" class="view-site-btn">
+                        View Website
+                        <span>↗</span>
+                    </a>
+
+                </div>
+
+            </header>
+
+
+            <!-- DASHBOARD CONTENT -->
+
+            <div class="dashboard-content">
+
+                <!-- WELCOME -->
+
+                <section class="welcome-card">
+
+                    <div>
+
+                        <span class="welcome-label">
+                            COLLEGE ADMINISTRATION
+                        </span>
+
+                        <h2>Welcome back, <%= admin.name %>.</h2>
+
+                        <p>
+                            Manage your college website,
+                            programs, student applications,
+                            and announcements from one place.
+                        </p>
+
+                    </div>
+
+                    <div class="welcome-decoration">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+
+                </section>
+
+
+                <!-- STATISTICS -->
+
+                <section class="stats-grid">
+
+                    <!-- COURSES -->
+
+                    <div class="stat-card">
+
+                        <div class="stat-top">
+
+                            <div class="stat-icon navy-icon">
+                                ▦
+                            </div>
+
+                            <span class="stat-status">
+                                Active
+                            </span>
+
+                        </div>
+
+                        <div class="stat-number">
+                            <%= stats.totalCourses %>
+                        </div>
+
+                        <div class="stat-title">
+                            Total Courses
+                        </div>
+
+                        <div class="stat-footer">
+                            <strong>
+                                <%= stats.activeCourses %>
+                            </strong>
+                            active programs
+                        </div>
+
+                    </div>
+
+
+                    <!-- APPLICATIONS -->
+
+                    <div class="stat-card">
+
+                        <div class="stat-top">
+
+                            <div class="stat-icon red-icon">
+                                ▤
+                            </div>
+
+                            <% if (stats.pendingApplications > 0) { %>
+
+                                <span class="stat-status pending">
+                                    Attention
+                                </span>
+
+                            <% } else { %>
+
+                                <span class="stat-status">
+                                    Up to date
+                                </span>
+
+                            <% } %>
+
+                        </div>
+
+                        <div class="stat-number">
+                            <%= stats.totalApplications %>
+                        </div>
+
+                        <div class="stat-title">
+                            Applications
+                        </div>
+
+                        <div class="stat-footer">
+                            <strong>
+                                <%= stats.pendingApplications %>
+                            </strong>
+                            pending review
+                        </div>
+
+                    </div>
+
+
+                    <!-- ANNOUNCEMENTS -->
+
+                    <div class="stat-card">
+
+                        <div class="stat-top">
+
+                            <div class="stat-icon navy-icon">
+                                ◈
+                            </div>
+
+                            <span class="stat-status">
+                                Published
+                            </span>
+
+                        </div>
+
+                        <div class="stat-number">
+                            <%= stats.totalAnnouncements %>
+                        </div>
+
+                        <div class="stat-title">
+                            Announcements
+                        </div>
+
+                        <div class="stat-footer">
+                            <strong>
+                                <%= stats.publishedAnnouncements %>
+                            </strong>
+                            currently published
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- MAIN GRID -->
+
+                <section class="dashboard-grid">
+
+                    <!-- APPLICATIONS -->
+
+                    <div class="panel applications-panel">
+
+                        <div class="panel-header">
+
+                            <div>
+                                <span class="panel-eyebrow">
+                                    STUDENT ACTIVITY
+                                </span>
+
+                                <h3>
+                                    Recent Applications
+                                </h3>
+                            </div>
+
+                            <a
+                                href="/admin/applications"
+                                class="panel-link"
+                            >
+                                View all
+                                <span>→</span>
+                            </a>
+
+                        </div>
+
+
+                        <% if (recentApplications.length > 0) { %>
+
+                            <div class="table-wrapper">
+
+                                <table>
+
+                                    <thead>
+
+                                        <tr>
+                                            <th>Student</th>
+                                            <th>Course</th>
+                                            <th>Date</th>
+                                            <th>Status</th>
+                                        </tr>
+
+                                    </thead>
+
+                                    <tbody>
+
+                                        <% recentApplications.forEach(application => { %>
+
+                                            <tr>
+
+                                                <td>
+
+                                                    <div class="student-cell">
+
+                                                        <div class="student-avatar">
+                                                            <%= application.studentName
+                                                                .charAt(0)
+                                                                .toUpperCase() %>
+                                                        </div>
+
+                                                        <div>
+                                                            <strong>
+                                                                <%= application.studentName %>
+                                                            </strong>
+
+                                                            <span>
+                                                                <%= application.email %>
+                                                            </span>
+                                                        </div>
+
+                                                    </div>
+
+                                                </td>
+
+
+                                                <td>
+
+                                                    <span class="course-name">
+
+                                                        <% if (application.course) { %>
+
+                                                            <%= application.course.title %>
+
+                                                        <% } else { %>
+
+                                                            Course unavailable
+
+                                                        <% } %>
+
+                                                    </span>
+
+                                                </td>
+
+
+                                                <td>
+
+                                                    <span class="date-text">
+
+                                                        <%= new Date(
+                                                            application.createdAt
+                                                        ).toLocaleDateString(
+                                                            "en-GB",
+                                                            {
+                                                                day: "2-digit",
+                                                                month: "short",
+                                                                year: "numeric"
+                                                            }
+                                                        ) %>
+
+                                                    </span>
+
+                                                </td>
+
+
+                                                <td>
+
+                                                    <% if (application.status === "Pending") { %>
+
+                                                        <span class="badge pending-badge">
+                                                            Pending
+                                                        </span>
+
+                                                    <% } else if (application.status === "Accepted") { %>
+
+                                                        <span class="badge accepted-badge">
+                                                            Accepted
+                                                        </span>
+
+                                                    <% } else { %>
+
+                                                        <span class="badge rejected-badge">
+                                                            Rejected
+                                                        </span>
+
+                                                    <% } %>
+
+                                                </td>
+
+                                            </tr>
+
+                                        <% }) %>
+
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+
+                        <% } else { %>
+
+                            <div class="empty-state">
+
+                                <div class="empty-icon">
+                                    ▤
+                                </div>
+
+                                <h4>
+                                    No applications yet
+                                </h4>
+
+                                <p>
+                                    Student applications will appear here.
+                                </p>
+
+                            </div>
+
+                        <% } %>
+
+                    </div>
+
+
+                    <!-- ANNOUNCEMENTS -->
+
+                    <div class="panel announcements-panel">
+
+                        <div class="panel-header">
+
+                            <div>
+                                <span class="panel-eyebrow">
+                                    WEBSITE CONTENT
+                                </span>
+
+                                <h3>
+                                    Announcements
+                                </h3>
+                            </div>
+
+                            <a
+                                href="/admin/announcements"
+                                class="panel-link"
+                            >
+                                Manage
+                            </a>
+
+                        </div>
+
+
+                        <% if (recentAnnouncements.length > 0) { %>
+
+                            <div class="announcement-list">
+
+                                <% recentAnnouncements.forEach(announcement => { %>
+
+                                    <div class="announcement-item">
+
+                                        <div class="announcement-date">
+
+                                            <span>
+                                                <%= new Date(
+                                                    announcement.createdAt
+                                                ).toLocaleDateString(
+                                                    "en-GB",
+                                                    {
+                                                        day: "2-digit"
+                                                    }
+                                                ) %>
+                                            </span>
+
+                                            <small>
+                                                <%= new Date(
+                                                    announcement.createdAt
+                                                ).toLocaleDateString(
+                                                    "en-GB",
+                                                    {
+                                                        month: "short"
+                                                    }
+                                                ) %>
+                                            </small>
+
+                                        </div>
+
+
+                                        <div class="announcement-content">
+
+                                            <div class="announcement-title-row">
+
+                                                <h4>
+                                                    <%= announcement.title %>
+                                                </h4>
+
+                                                <% if (
+                                                    announcement.status ===
+                                                    "published"
+                                                ) { %>
+
+                                                    <span class="published-dot">
+                                                        Published
+                                                    </span>
+
+                                                <% } else { %>
+
+                                                    <span class="draft-dot">
+                                                        Draft
+                                                    </span>
+
+                                                <% } %>
+
+                                            </div>
+
+                                            <p>
+                                                <%= announcement.description.length > 85
+                                                    ? announcement.description.substring(0, 85) + "..."
+                                                    : announcement.description %>
+                                            </p>
+
+                                        </div>
+
+                                    </div>
+
+                                <% }) %>
+
+                            </div>
+
+                        <% } else { %>
+
+                            <div class="empty-state">
+
+                                <div class="empty-icon">
+                                    ◈
+                                </div>
+
+                                <h4>
+                                    No announcements
+                                </h4>
+
+                                <p>
+                                    Create an announcement to display it here.
+                                </p>
+
+                            </div>
+
+                        <% } %>
+
+                    </div>
+
+                </section>
+
+
+                <!-- QUICK ACTIONS -->
+
+                <section class="quick-section">
+
+                    <div class="section-heading">
+
+                        <div>
+
+                            <span class="panel-eyebrow">
+                                QUICK ACTIONS
+                            </span>
+
+                            <h3>
+                                Manage Website
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="quick-grid">
+
+                        <a
+                            href="/admin/courses/create"
+                            class="quick-card"
+                        >
+
+                            <div class="quick-icon navy-icon">
+                                +
+                            </div>
+
+                            <div>
+                                <strong>
+                                    Add Course
+                                </strong>
+
+                                <span>
+                                    Create a new academic program
+                                </span>
+                            </div>
+
+                            <span class="quick-arrow">
+                                →
+                            </span>
+
+                        </a>
+
+
+                        <a
+                            href="/admin/applications"
+                            class="quick-card"
+                        >
+
+                            <div class="quick-icon red-icon">
+                                ▤
+                            </div>
+
+                            <div>
+                                <strong>
+                                    Applications
+                                </strong>
+
+                                <span>
+                                    Review student applications
+                                </span>
+                            </div>
+
+                            <span class="quick-arrow">
+                                →
+                            </span>
+
+                        </a>
+
+
+                        <a
+                            href="/admin/announcements/create"
+                            class="quick-card"
+                        >
+
+                            <div class="quick-icon navy-icon">
+                                +
+                            </div>
+
+                            <div>
+                                <strong>
+                                    Announcement
+                                </strong>
+
+                                <span>
+                                    Publish a new announcement
+                                </span>
+                            </div>
+
+                            <span class="quick-arrow">
+                                →
+                            </span>
+
+                        </a>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+        </main>
+
+    </div>
+
+
+    <div
+        class="sidebar-overlay"
+        id="sidebarOverlay"
+    ></div>
+
+
+    <script src="/javascripts/admin.js"></script>
+
+</body>
+</html>
