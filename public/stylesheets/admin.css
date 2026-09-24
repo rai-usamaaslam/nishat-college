@@ -4,8 +4,8 @@
     --navy-800: #102b50;
     --navy-700: #173b68;
 
-    --red-600: #c91f2b;
-    --red-700: #ae1723;
+    --red-600: #a91e2d;
+    --red-700: #a91e2d;
 
     --white: #ffffff;
     --background: #f5f7fa;
@@ -23,7 +23,7 @@
     --warning: #a15c00;
     --warning-bg: #fff7e6;
 
-    --danger: #b42318;
+    --danger: #a91e2d;
     --danger-bg: #fef3f2;
 
     --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.04);
@@ -507,7 +507,7 @@ button {
 
 
 .welcome-label {
-    color: #e85c65;
+    color: #a91e2d;
 }
 
 
