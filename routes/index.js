@@ -13,6 +13,8 @@ function escapeXml(value) {
   })[character]);
 }
 
+router.get("/favicon.ico", (req, res) => res.redirect(301, "/favicon.svg"));
+
 router.get("/robots.txt", (req, res) => {
   res.type("text/plain").send([
     "User-agent: *",
@@ -148,12 +150,21 @@ router.post("/apply/:courseId", async (req, res, next) => {
       marks: Number(req.body.marks),
       course: course._id,
     };
-    const missing = [values.studentName, values.fatherName, values.email, values.phone, values.cnic,
+    const requiredMissing = [values.studentName, values.fatherName, values.email, values.phone, values.cnic,
       values.dob, values.gender, values.address, values.qualification].some((item) => !item);
-    if (missing || !/^\S+@\S+\.\S+$/.test(values.email) || !Number.isFinite(values.marks) || values.marks < 0) {
+    const birthDate = new Date(values.dob);
+    const phoneDigits = values.phone.replace(/\D/g, "");
+    const invalid = requiredMissing ||
+      values.studentName.length > 120 || values.fatherName.length > 120 || values.email.length > 254 ||
+      values.phone.length > 30 || phoneDigits.length < 7 || !/^\+?[\d\s()-]+$/.test(values.phone) ||
+      !/^\d{5}-?\d{7}-?\d$/.test(values.cnic) || Number.isNaN(birthDate.getTime()) || birthDate > new Date() ||
+      !["Female", "Male", "Other"].includes(values.gender) || values.address.length > 1000 ||
+      values.qualification.length > 160 || !/^\S+@\S+\.\S+$/.test(values.email) ||
+      !Number.isFinite(values.marks) || values.marks < 0;
+    if (invalid) {
       return res.status(400).render("application-form", {
         title: `Apply for ${course.title} | Nishat Institute, Chiniot`, course, values,
-        error: "Complete every field using a valid email address and marks value.",
+        error: "Check all fields. Enter a valid email, phone number, 13-digit CNIC, past date of birth, and non-negative marks.",
       });
     }
     const application = await Application.create(values);

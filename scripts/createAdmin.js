@@ -7,6 +7,9 @@ const bcrypt = require("bcrypt");
 const User = require("../models/User");
 
 async function main() {
+  if (process.env.NODE_ENV === "production" && (!process.env.MONGO_URI || /localhost|127\.0\.0\.1/i.test(process.env.MONGO_URI))) {
+    throw new Error("Set MONGO_URI to the production database before creating an administrator.");
+  }
   const rl = readline.createInterface({ input, output });
   try {
     const name = (await rl.question("Admin name: ")).trim();

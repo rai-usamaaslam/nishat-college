@@ -27,7 +27,7 @@ if (isProduction) {
 
   let publicUrl;
   try { publicUrl = new URL(process.env.APP_BASE_URL); } catch { throw new Error("APP_BASE_URL must be a valid public HTTPS URL."); }
-  if (publicUrl.protocol !== "https:" || /^(localhost|127\.0\.0\.1)(:\d+)?$/i.test(publicUrl.host) || publicUrl.username || publicUrl.password) {
+  if (publicUrl.protocol !== "https:" || /^(localhost|127\.0\.0\.1)(:\d+)?$/i.test(publicUrl.host) || publicUrl.username || publicUrl.password || publicUrl.pathname !== "/" || publicUrl.search || publicUrl.hash) {
     throw new Error("APP_BASE_URL must use HTTPS and a public hostname in production.");
   }
   if (/localhost|127\.0\.0\.1/i.test(process.env.MONGO_URI)) {
@@ -43,6 +43,12 @@ app.set("view engine", "ejs");
 app.disable("x-powered-by");
 
 app.use((req, res, next) => {
+  if (!isProduction || req.secure) return next();
+  const requestedPath = req.originalUrl.startsWith("//") ? "/" : req.originalUrl;
+  return res.redirect(301, new URL(requestedPath, process.env.APP_BASE_URL).toString());
+});
+
+app.use((req, res, next) => {
   const configuredOrigin = process.env.APP_BASE_URL;
   res.locals.siteOrigin = (configuredOrigin || `${req.protocol}://${req.get("host")}`).replace(/\/$/, "");
   res.set("X-Content-Type-Options", "nosniff");
@@ -51,6 +57,17 @@ app.use((req, res, next) => {
   res.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
   if (isProduction) res.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
   next();
+});
+
+app.use((req, res, next) => {
+  if (["GET", "HEAD", "OPTIONS"].includes(req.method) || !req.get("origin")) return next();
+  try {
+    const expectedOrigin = new URL(process.env.APP_BASE_URL || `${req.protocol}://${req.get("host")}`).origin;
+    if (new URL(req.get("origin")).origin !== expectedOrigin) return res.status(403).send("Invalid request origin.");
+    return next();
+  } catch {
+    return res.status(403).send("Invalid request origin.");
+  }
 });
 
 app.use(logger("dev", { skip: (req) => req.path.startsWith("/admin/reset-password/") }));

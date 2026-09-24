@@ -45,7 +45,7 @@
             <p>Nishat Institute of Medical Science and Technology brings together experienced faculty, modern learning resources, and a structured academic environment to prepare students for successful careers in healthcare. We focus on both theoretical depth and practical, career-ready skills.</p>
           </div>
           <figure class="about-photo">
-            <img src="/images/aboutpic.jpg" alt="Healthcare professionals working in a modern clinical environment" loading="lazy" decoding="async">
+            <img src="/images/optimized/aboutpic.webp" alt="Healthcare professionals working in a modern clinical environment" width="900" height="600" loading="lazy" decoding="async">
           </figure>
         </div>
         <div class="about-actions">
@@ -74,7 +74,7 @@
                 <p><%= course.shortDescription %></p>
                 <div class="course-meta">
                   <span><b>Duration</b><%= course.duration %></span>
-                  <span><b>Eligibility</b><%= course.eligibility %></span>
+                  <span><b>Fee</b>PKR <%= Number(course.fee).toLocaleString() %></span>
                 </div>
                 <a class="text-link" href="/courses/<%= course._id %>">View course details →</a>
               </div>
