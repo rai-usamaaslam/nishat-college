@@ -294,3 +294,25 @@ h1, h2, h3, .course-facts h2, .course-copy h3, .why-grid h3, .footer-links h2, .
 .about-route-copy article>p{max-width:680px}
 @media(max-width:900px){.home-about .about-lead{grid-template-columns:minmax(0,1fr) minmax(240px,.8fr);gap:30px}.home-about .about-photo{height:350px}.about-content.about-route-content{grid-template-columns:minmax(240px,.9fr) minmax(0,1.1fr);gap:30px}.about-route-photo{height:285px}}
 @media(max-width:560px){.home-about .about-lead{display:grid;grid-template-columns:1fr;gap:24px}.home-about .about-copy{grid-column:1;grid-row:1}.home-about .about-photo{grid-column:1;grid-row:2;height:300px}.about-page-hero{padding-top:34px;padding-bottom:38px}.about-content.about-route-content{grid-template-columns:1fr;gap:26px;padding-top:38px;padding-bottom:50px}.about-route-photo{height:260px;order:0}.about-route-copy{order:1;gap:18px}}
+
+/* About page: director message and institutional purpose */
+.director-message-section{display:grid;grid-template-columns:minmax(310px,.78fr) minmax(0,1.22fr);align-items:center;gap:58px;max-width:1200px;margin:0 auto;padding:72px 28px 78px}
+.director-portrait{width:100%;max-width:430px;margin:0 auto;overflow:hidden;border:1px solid #d7e0e8;border-radius:14px;background:#0b213c;box-shadow:0 20px 48px #102b4e20}
+.director-portrait img{display:block;width:100%;height:510px;object-fit:contain;object-position:center;background:#0b213c}
+.director-portrait figcaption{display:grid;gap:4px;padding:16px 19px;background:#0b213c;color:#fff}
+.director-portrait figcaption strong{font:600 22px/1.2 var(--heading-font)}
+.director-portrait figcaption span{color:#d1dae4;font-size:13px}
+.director-message-copy h2,.institution-copy h2,.mission-vision-section h2{margin:12px 0 18px;color:var(--navy);font:600 clamp(32px,4vw,45px)/1.14 var(--heading-font);letter-spacing:-.03em}
+.director-message-copy p,.institution-copy p,.mission-vision-section p{color:#566779;font-size:15px;line-height:1.8}
+.director-message-copy p{margin:0 0 14px}
+.institution-section{padding:70px 28px;background:#f2f5f8}
+.institution-copy{max-width:900px;margin:0 auto}
+.institution-copy h2{max-width:680px}
+.institution-copy p{max-width:850px;margin:0 0 14px}
+.institution-copy .button-primary{margin-top:12px}
+.mission-vision-section{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:46px;max-width:1144px;margin:0 auto;padding:72px 28px 86px}
+.mission-vision-section article{padding:12px 0 12px 23px;border-left:3px solid var(--red)}
+.mission-vision-section h2{margin:10px 0 12px;font-size:31px}
+.mission-vision-section p{max-width:480px;margin:0;font-size:16px}
+@media(max-width:800px){.director-message-section{grid-template-columns:minmax(240px,.75fr) minmax(0,1.25fr);gap:30px;padding:55px 24px 60px}.director-portrait img{height:430px}.director-message-copy h2{font-size:35px}.director-message-copy p{font-size:14px}.institution-section{padding:55px 24px}.mission-vision-section{gap:28px;padding:55px 24px 65px}}
+@media(max-width:600px){.director-message-section{grid-template-columns:1fr;gap:28px;padding:40px 20px 48px}.director-portrait{max-width:370px}.director-portrait img{height:430px}.director-message-copy h2,.institution-copy h2{font-size:34px}.institution-section{padding:44px 20px}.mission-vision-section{grid-template-columns:1fr;gap:24px;padding:45px 20px 55px}.mission-vision-section article{padding-left:17px}}
