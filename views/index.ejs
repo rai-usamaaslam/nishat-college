@@ -13,7 +13,7 @@
     <link rel="canonical" href="<%= siteOrigin %>/">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <script type="application/ld+json">
-      {"@context":"https://schema.org","@type":"EducationalOrganization","name":"Nishat Institute of Medical Science and Technology","address":{"@type":"PostalAddress","streetAddress":"Lahore Road, near Government Quarters","addressLocality":"Chiniot","addressRegion":"Punjab","addressCountry":"PK"},"telephone":"+92 370 9067818","email":"nishatakhtar1000@gmail.com"}
+      <%- JSON.stringify({"@context":"https://schema.org","@type":"EducationalOrganization","name":"Nishat Institute of Medical Science and Technology","address":{"@type":"PostalAddress","streetAddress":siteSettings.address,"addressLocality":"Chiniot","addressRegion":"Punjab","addressCountry":"PK"},"telephone":siteSettings.phone,"email":siteSettings.email}).replace(/</g, "\\u003c") %>
     </script>
     <title><%= title %></title>
     <link rel="stylesheet" href="/stylesheets/style.css">
@@ -66,10 +66,10 @@
           <% if (!courses.length) { %>
             <p class="empty-public">Program information will be published here soon.</p>
           <% } %>
-          <% courses.slice(0, 3).forEach((course, index) => { %>
+          <% courses.slice(0, 3).forEach((course) => { %>
             <article class="course-card">
               <div class="course-copy">
-                <span class="course-index">0<%= index + 1 %> <i>·</i> ACADEMIC PROGRAM</span>
+                <span class="eyebrow">ACADEMIC PROGRAM</span>
                 <h3><%= course.title %></h3>
                 <p><%= course.shortDescription %></p>
                 <div class="course-meta">

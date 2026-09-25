@@ -13,7 +13,7 @@
     <link rel="canonical" href="<%= siteOrigin %>/contact">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <script type="application/ld+json">
-      {"@context":"https://schema.org","@type":"EducationalOrganization","name":"Nishat Institute of Medical Science and Technology","address":{"@type":"PostalAddress","streetAddress":"Lahore Road, near Government Quarters","addressLocality":"Chiniot","addressRegion":"Punjab","addressCountry":"PK"},"telephone":"+92 370 9067818","email":"nishatakhtar1000@gmail.com"}
+      <%- JSON.stringify({"@context":"https://schema.org","@type":"EducationalOrganization","name":"Nishat Institute of Medical Science and Technology","address":{"@type":"PostalAddress","streetAddress":siteSettings.address,"addressLocality":"Chiniot","addressRegion":"Punjab","addressCountry":"PK"},"telephone":siteSettings.phone,"email":siteSettings.email}).replace(/</g, "\\u003c") %>
     </script>
     <title><%= title %></title>
     <link rel="stylesheet" href="/stylesheets/style.css">
@@ -37,17 +37,17 @@
           <a class="text-link" href="/courses">Explore our programs <span aria-hidden="true">→</span></a>
 
           <div class="contact-details">
-            <a class="contact-detail" href="tel:+923709067818">
+            <a class="contact-detail" href="tel:<%= siteSettings.phone.replace(/[^\d+]/g, '') %>">
               <span class="contact-detail-icon" aria-hidden="true">☎</span>
-              <span><small>CALL US</small><strong>+92 370 9067818</strong></span>
+              <span><small>CALL US</small><strong><%= siteSettings.phone %></strong></span>
             </a>
-            <a class="contact-detail" href="mailto:nishatakhtar1000@gmail.com">
+            <a class="contact-detail" href="mailto:<%= siteSettings.email %>">
               <span class="contact-detail-icon" aria-hidden="true">@</span>
-              <span><small>EMAIL US</small><strong>nishatakhtar1000@gmail.com</strong></span>
+              <span><small>EMAIL US</small><strong><%= siteSettings.email %></strong></span>
             </a>
             <div class="contact-detail">
               <span class="contact-detail-icon" aria-hidden="true">⌖</span>
-              <span><small>VISIT US</small><strong>Lahore Road, near Government Quarters, Chiniot, Punjab, Pakistan</strong></span>
+              <span><small>VISIT US</small><strong><%= siteSettings.address %></strong></span>
             </div>
           </div>
         </div>
@@ -75,12 +75,12 @@
           <div>
             <span class="eyebrow">FIND OUR CAMPUS</span>
             <h2 id="contact-map-title">Visit us in Chiniot</h2>
-            <p>Lahore Road, near Government Quarters, Chiniot, Punjab, Pakistan</p>
+            <p><%= siteSettings.address %></p>
           </div>
-          <a class="text-link" href="https://www.google.com/maps/search/?api=1&amp;query=Lahore%20Road%2C%20near%20Government%20Quarters%2C%20Chiniot%2C%20Punjab%2C%20Pakistan" target="_blank" rel="noopener noreferrer">Open in Google Maps <span aria-hidden="true">↗</span></a>
+          <a class="text-link" href="https://www.google.com/maps/search/?api=1&amp;query=<%= encodeURIComponent(siteSettings.address) %>" target="_blank" rel="noopener noreferrer">Open in Google Maps <span aria-hidden="true">↗</span></a>
         </div>
         <div class="contact-map-frame">
-          <iframe title="Map showing Nishat Institute of Medical Science and Technology in Chiniot" src="https://maps.google.com/maps?q=Lahore%20Road%2C%20near%20Government%20Quarters%2C%20Chiniot%2C%20Punjab%2C%20Pakistan&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+          <iframe title="Map showing Nishat Institute of Medical Science and Technology in Chiniot" src="https://maps.google.com/maps?q=<%= encodeURIComponent(siteSettings.address) %>&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
         </div>
       </section>
     </main>

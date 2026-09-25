@@ -9,6 +9,7 @@ const User = require("../models/User");
 const Course = require("../models/Course");
 const Application = require("../models/Application");
 const Announcement = require("../models/Announcement");
+const SiteSettings = require("../models/SiteSettings");
 const adminAuth = require("../middleware/adminAuth");
 
 const title = (page) => `${page} | Nishat Institute of Medical Science and Technology`;
@@ -261,7 +262,10 @@ router.post("/courses/:id/delete", asyncRoute(async (req, res) => {
 router.get("/applications", asyncRoute(async (req, res) => {
   const filter = ["Pending", "Accepted", "Rejected"].includes(req.query.status) ? { status: req.query.status } : {};
   const applications = await Application.find(filter).populate("course", "title").sort({ createdAt: -1 }).lean();
-  return res.render("admin/applications", { title: title("Applications"), admin: req.session.admin, applications, status: req.query.status || "" });
+  return res.render("admin/applications", {
+    title: title("Applications"), admin: req.session.admin, applications, status: req.query.status || "",
+    queryNotice: req.query.deleted ? "Application deleted successfully." : null,
+  });
 }));
 router.get("/applications/:id", asyncRoute(async (req, res) => {
   if (!validId(req.params.id)) throw createError(400, "Invalid application ID.");
@@ -276,6 +280,12 @@ router.post("/applications/:id/status", asyncRoute(async (req, res) => {
   const application = await Application.findByIdAndUpdate(req.params.id, { status }, { new: true, runValidators: true });
   if (!application) throw createError(404, "Application not found.");
   return res.redirect(`/admin/applications/${application._id}?updated=1`);
+}));
+router.post("/applications/:id/delete", asyncRoute(async (req, res) => {
+  if (!validId(req.params.id)) throw createError(400, "Invalid application ID.");
+  const application = await Application.findByIdAndDelete(req.params.id);
+  if (!application) throw createError(404, "Application not found.");
+  return res.redirect("/admin/applications?deleted=1");
 }));
 
 // Announcement management
@@ -332,7 +342,33 @@ router.post("/announcements/:id/delete", asyncRoute(async (req, res) => {
 // Admin account settings
 router.get("/settings", (req, res) => res.render("admin/settings", {
   title: title("Settings"), admin: req.session.admin, error: null, message: null,
+  contactError: null, contactMessage: null, siteSettings: req.app.locals.siteSettings,
   queryNotice: req.query.updated ? "Account settings updated." : null,
+}));
+router.post("/settings/contact", asyncRoute(async (req, res) => {
+  const siteSettings = {
+    phone: String(req.body.phone || "").trim(),
+    address: String(req.body.address || "").trim(),
+    email: String(req.body.publicEmail || "").trim().toLowerCase(),
+  };
+  const phoneDigits = siteSettings.phone.replace(/\D/g, "");
+  if (!siteSettings.phone || siteSettings.phone.length > 40 || phoneDigits.length < 7 || !/^\+?[\d\s()-]+$/.test(siteSettings.phone) ||
+      !siteSettings.address || siteSettings.address.length > 240 || !emailPattern.test(siteSettings.email) || siteSettings.email.length > 254) {
+    return res.status(400).render("admin/settings", {
+      title: title("Settings"), admin: req.session.admin, error: null, message: null,
+      contactError: "Enter a valid public phone number, address, and email address.", contactMessage: null,
+      siteSettings, queryNotice: null,
+    });
+  }
+  const saved = await SiteSettings.findOneAndUpdate({ key: "public" }, { $set: siteSettings, $setOnInsert: { key: "public" } }, {
+    upsert: true, returnDocument: "after", runValidators: true, setDefaultsOnInsert: true,
+  }).lean();
+  req.app.locals.siteSettings = { phone: saved.phone, address: saved.address, email: saved.email };
+  return res.render("admin/settings", {
+    title: title("Settings"), admin: req.session.admin, error: null, message: null,
+    contactError: null, contactMessage: "Public contact information updated.",
+    siteSettings: req.app.locals.siteSettings, queryNotice: null,
+  });
 }));
 router.post("/settings", asyncRoute(async (req, res, next) => {
   const user = await User.findById(req.session.admin.id).select("name email password role");
@@ -350,7 +386,10 @@ router.post("/settings", asyncRoute(async (req, res, next) => {
   else if (!(await bcrypt.compare(currentPassword, user.password))) error = "Current password is incorrect.";
   else if (newPassword && newPassword.length < 12) error = "A new password must have at least 12 characters.";
   else if (newPassword && newPassword !== confirmPassword) error = "The new passwords do not match.";
-  if (error) return res.status(400).render("admin/settings", { title: title("Settings"), admin: req.session.admin, error, message: null, queryNotice: null });
+  if (error) return res.status(400).render("admin/settings", {
+    title: title("Settings"), admin: req.session.admin, error, message: null,
+    contactError: null, contactMessage: null, siteSettings: req.app.locals.siteSettings, queryNotice: null,
+  });
 
   user.name = name;
   user.email = email;
@@ -360,7 +399,7 @@ router.post("/settings", asyncRoute(async (req, res, next) => {
   } catch (saveError) {
     if (saveError.code === 11000) return res.status(409).render("admin/settings", {
       title: title("Settings"), admin: req.session.admin, error: "That email is already in use.", message: null,
-      queryNotice: null,
+      contactError: null, contactMessage: null, siteSettings: req.app.locals.siteSettings, queryNotice: null,
     });
     throw saveError;
   }

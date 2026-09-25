@@ -8,11 +8,17 @@ const logger = require("morgan");
 const session = require("express-session");
 const { MongoStore } = require("connect-mongo");
 const mongoose = require("mongoose");
+const SiteSettings = require("./models/SiteSettings");
 
 const indexRouter = require("./routes/index");
 const adminRouter = require("./routes/admin");
 
 const app = express();
+app.locals.siteSettings = {
+  phone: "+92 370 9067818",
+  address: "Lahore Road, near Government Quarters, Chiniot, Punjab, Pakistan",
+  email: "nishatakhtar1000@gmail.com",
+};
 const sessionSecret = process.env.SESSION_SECRET;
 const isProduction = process.env.NODE_ENV === "production";
 if (isProduction) app.set("trust proxy", 1);
@@ -56,6 +62,7 @@ app.use((req, res, next) => {
   res.set("X-Frame-Options", "DENY");
   res.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
   if (isProduction) res.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+  res.locals.siteSettings = app.locals.siteSettings;
   next();
 });
 
@@ -70,14 +77,16 @@ app.use((req, res, next) => {
   }
 });
 
-app.use(logger("dev", { skip: (req) => req.path.startsWith("/admin/reset-password/") }));
+app.use(logger(isProduction ? "combined" : "dev", { skip: (req) => req.path.startsWith("/admin/reset-password/") }));
 app.use(express.json({ limit: "32kb" }));
 app.use(express.urlencoded({ extended: false, limit: "32kb" }));
 app.use(cookieParser());
+const sessionStore = MongoStore.create({ mongoUrl: process.env.MONGO_URI || "mongodb://127.0.0.1:27017/nishat_college" });
+app.locals.sessionStore = sessionStore;
 app.use(session({
   name: "nishat.sid",
   secret: sessionSecret || "local-development-session-secret-change-me",
-  store: MongoStore.create({ mongoUrl: process.env.MONGO_URI || "mongodb://127.0.0.1:27017/nishat_college" }),
+  store: sessionStore,
   resave: false,
   saveUninitialized: false,
   cookie: {
@@ -106,6 +115,10 @@ app.use((err, req, res, next) => {
 // The server waits for this promise before accepting requests.
 const mongoUri = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/nishat_college";
 app.locals.databaseReady = mongoose.connect(mongoUri)
-  .then(() => console.log("Connected to MongoDB"));
+  .then(async () => {
+    const settings = await SiteSettings.findOne({ key: "public" }).lean();
+    if (settings) app.locals.siteSettings = { phone: settings.phone, address: settings.address, email: settings.email };
+    console.log("Connected to MongoDB");
+  });
 
 module.exports = app;

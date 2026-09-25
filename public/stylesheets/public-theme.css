@@ -222,6 +222,32 @@ h3 {
   padding-bottom: 82px;
   background: linear-gradient(115deg, var(--navy-deep), #173a61);
 }
+.detail-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--navy-deep);
+}
+.detail-hero::before {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(7, 21, 45, 0.93), rgba(16, 43, 80, 0.72));
+  content: "";
+}
+.detail-hero-image {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 42%;
+}
+.detail-hero > :not(.detail-hero-image) {
+  position: relative;
+  z-index: 2;
+}
 .page-hero h1,
 .detail-hero h1 {
   font-size: clamp(38px, 5vw, 58px);
@@ -391,17 +417,6 @@ h3 {
 }
 .home-programs .course-meta span {
   flex: 1;
-}
-.course-index {
-  color: #667085;
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.09em;
-}
-.course-index i {
-  padding: 0 4px;
-  color: var(--red);
-  font-style: normal;
 }
 .section-actions {
   display: flex;

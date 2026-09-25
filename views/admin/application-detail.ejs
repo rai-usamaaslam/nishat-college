@@ -9,4 +9,5 @@
 <dt>Marks</dt><dd><%= application.marks %></dd><dt>Course</dt><dd><%= application.course ? application.course.title : "Course unavailable" %></dd><dt>Current status</dt><dd><span class="status-pill <%= application.status.toLowerCase() %>"><%= application.status %></span></dd>
 </dl></section>
 <form class="form-card compact-form" method="post" action="/admin/applications/<%= application._id %>/status"><label>Update application status<select name="status"><% ["Pending","Accepted","Rejected"].forEach(item => { %><option value="<%= item %>" <%= application.status === item ? "selected" : "" %>><%= item %></option><% }) %></select></label><div class="form-actions"><a class="secondary-link" href="/admin/applications">Back to applications</a><button class="primary-button">Save status</button></div></form>
+<form class="form-actions" method="post" action="/admin/applications/<%= application._id %>/delete" onsubmit="return confirm('Permanently delete this application? This cannot be undone.')"><button class="danger-link" type="submit">Delete application</button></form>
 <%- include("_page-end") %>
